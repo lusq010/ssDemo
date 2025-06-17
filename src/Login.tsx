@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Paper, Typography } from '@mui/material';
+import logo from './assets/react.svg'
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -20,9 +21,10 @@ const Login: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-      <Paper elevation={3} style={{ padding: 32, minWidth: 320 }}>
+      <Paper elevation={3} style={{ padding: 32, width: 400 }}>
+        <img src={logo} alt="logo" style={{ display: 'block', width: '100%', maxWidth: '100%', margin: '0 auto 16px auto', height: 56, objectFit: 'contain' }} />
         <Typography variant="h5" gutterBottom>登录</Typography>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} style={{ width: '100%' }}>
           <TextField
             label="账号"
             fullWidth
