@@ -1,5 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom'
-import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Box, Grid, Paper } from '@mui/material'
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Box, Grid, Paper, useTheme } from '@mui/material'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -198,6 +198,8 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 }
 
 function Dashboard() {
+  const theme = useTheme();
+  
   // 示例数据
   const pageLoadData = [
     { name: '00:00', value: 2.1 },
@@ -251,18 +253,20 @@ function Dashboard() {
       gap: 2.5,
       gridTemplateColumns: 'repeat(12, 1fr)',
       p: 3,
-      bgcolor: '#f8f9fa'
+      bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.default' : '#f8f9fa'
     }}>
       {/* Page Title */}
       <Box sx={{ gridColumn: 'span 12', mb: 1 }}>
         <Typography variant="h5" sx={{ 
-          color: '#1a237e',
+          color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
           fontWeight: 500,
           mb: 1
         }}>
           System Performance Monitor
         </Typography>
-        <Typography variant="body2" sx={{ color: '#546e7a' }}>
+        <Typography variant="body2" sx={{ 
+          color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#546e7a'
+        }}>
           Real-time monitoring of key system metrics to ensure business stability
         </Typography>
       </Box>
@@ -277,17 +281,19 @@ function Dashboard() {
             alignItems: 'center',
             gap: 2,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff',
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper',
             transition: 'box-shadow 0.3s',
             '&:hover': {
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+              boxShadow: (theme) => theme.palette.mode === 'dark' 
+                ? '0 4px 12px rgba(0,0,0,0.3)'
+                : '0 4px 12px rgba(0,0,0,0.08)'
             }
           }}
         >
           <div>
             <Typography variant="subtitle2" sx={{ 
-              color: '#37474f',
+              color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#37474f',
               fontWeight: 500,
               fontSize: '0.875rem',
               mb: 1
@@ -295,7 +301,7 @@ function Dashboard() {
               Average Page Load Time
             </Typography>
             <Typography variant="h4" sx={{ 
-              color: '#1a237e',
+              color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
               fontWeight: 600,
               fontSize: '1.75rem',
               mb: 0.5
@@ -308,12 +314,14 @@ function Dashboard() {
               gap: 0.5
             }}>
               <Typography variant="caption" sx={{ 
-                color: '#2e7d32',
+                color: (theme) => theme.palette.mode === 'dark' ? 'success.light' : '#2e7d32',
                 fontWeight: 500
               }}>
                 ↓ 12%
               </Typography>
-              <Typography variant="caption" sx={{ color: '#78909c' }}>
+              <Typography variant="caption" sx={{ 
+                color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c'
+              }}>
                 vs last week
               </Typography>
             </Box>
@@ -330,17 +338,19 @@ function Dashboard() {
             alignItems: 'center',
             gap: 2,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff',
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper',
             transition: 'box-shadow 0.3s',
             '&:hover': {
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+              boxShadow: (theme) => theme.palette.mode === 'dark' 
+                ? '0 4px 12px rgba(0,0,0,0.3)'
+                : '0 4px 12px rgba(0,0,0,0.08)'
             }
           }}
         >
           <div>
             <Typography variant="subtitle2" sx={{ 
-              color: '#37474f',
+              color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#37474f',
               fontWeight: 500,
               fontSize: '0.875rem',
               mb: 1
@@ -348,7 +358,7 @@ function Dashboard() {
               API Response Time
             </Typography>
             <Typography variant="h4" sx={{ 
-              color: '#1a237e',
+              color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
               fontWeight: 600,
               fontSize: '1.75rem',
               mb: 0.5
@@ -361,12 +371,14 @@ function Dashboard() {
               gap: 0.5
             }}>
               <Typography variant="caption" sx={{ 
-                color: '#2e7d32',
+                color: (theme) => theme.palette.mode === 'dark' ? 'success.light' : '#2e7d32',
                 fontWeight: 500
               }}>
                 ↓ 8%
               </Typography>
-              <Typography variant="caption" sx={{ color: '#78909c' }}>
+              <Typography variant="caption" sx={{ 
+                color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c'
+              }}>
                 vs last week
               </Typography>
             </Box>
@@ -383,17 +395,19 @@ function Dashboard() {
             alignItems: 'center',
             gap: 2,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff',
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper',
             transition: 'box-shadow 0.3s',
             '&:hover': {
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+              boxShadow: (theme) => theme.palette.mode === 'dark' 
+                ? '0 4px 12px rgba(0,0,0,0.3)'
+                : '0 4px 12px rgba(0,0,0,0.08)'
             }
           }}
         >
           <div>
             <Typography variant="subtitle2" sx={{ 
-              color: '#37474f',
+              color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#37474f',
               fontWeight: 500,
               fontSize: '0.875rem',
               mb: 1
@@ -401,7 +415,7 @@ function Dashboard() {
               Server CPU Usage
             </Typography>
             <Typography variant="h4" sx={{ 
-              color: '#1a237e',
+              color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
               fontWeight: 600,
               fontSize: '1.75rem',
               mb: 0.5
@@ -414,12 +428,14 @@ function Dashboard() {
               gap: 0.5
             }}>
               <Typography variant="caption" sx={{ 
-                color: '#d32f2f',
+                color: (theme) => theme.palette.mode === 'dark' ? 'error.light' : '#d32f2f',
                 fontWeight: 500
               }}>
                 ↑ 5%
               </Typography>
-              <Typography variant="caption" sx={{ color: '#78909c' }}>
+              <Typography variant="caption" sx={{ 
+                color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c'
+              }}>
                 vs last week
               </Typography>
             </Box>
@@ -436,17 +452,19 @@ function Dashboard() {
             alignItems: 'center',
             gap: 2,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff',
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper',
             transition: 'box-shadow 0.3s',
             '&:hover': {
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+              boxShadow: (theme) => theme.palette.mode === 'dark' 
+                ? '0 4px 12px rgba(0,0,0,0.3)'
+                : '0 4px 12px rgba(0,0,0,0.08)'
             }
           }}
         >
           <div>
             <Typography variant="subtitle2" sx={{ 
-              color: '#37474f',
+              color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#37474f',
               fontWeight: 500,
               fontSize: '0.875rem',
               mb: 1
@@ -454,7 +472,7 @@ function Dashboard() {
               System Error Rate
             </Typography>
             <Typography variant="h4" sx={{ 
-              color: '#1a237e',
+              color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
               fontWeight: 600,
               fontSize: '1.75rem',
               mb: 0.5
@@ -467,12 +485,14 @@ function Dashboard() {
               gap: 0.5
             }}>
               <Typography variant="caption" sx={{ 
-                color: '#d32f2f',
+                color: (theme) => theme.palette.mode === 'dark' ? 'error.light' : '#d32f2f',
                 fontWeight: 500
               }}>
                 ↑ 0.2%
               </Typography>
-              <Typography variant="caption" sx={{ color: '#78909c' }}>
+              <Typography variant="caption" sx={{ 
+                color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c'
+              }}>
                 vs last week
               </Typography>
             </Box>
@@ -488,19 +508,19 @@ function Dashboard() {
             p: 3,
             height: 400,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff'
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
           }}
         >
           <Typography variant="subtitle1" sx={{ 
-            color: '#1a237e',
+            color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
             fontWeight: 500,
             mb: 0.5
           }}>
             Page Load Time Trend
           </Typography>
           <Typography variant="caption" sx={{ 
-            color: '#78909c',
+            color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c',
             display: 'block',
             mb: 3
           }}>
@@ -508,28 +528,32 @@ function Dashboard() {
           </Typography>
           <ResponsiveContainer width="100%" height="85%">
             <LineChart data={pageLoadData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke={theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : '#f5f5f5'}
+              />
               <XAxis 
                 dataKey="name" 
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161' }}
               />
               <YAxis 
                 unit="s"
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161' }}
               />
               <Tooltip 
                 contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px'
+                  backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: '4px',
+                  color: theme.palette.mode === 'dark' ? '#fff' : 'inherit'
                 }}
               />
               <Line
                 type="monotone"
                 dataKey="value"
-                stroke="#1a237e"
+                stroke={theme.palette.mode === 'dark' ? '#90caf9' : '#1a237e'}
                 strokeWidth={2}
                 dot={false}
               />
@@ -546,19 +570,19 @@ function Dashboard() {
             p: 3,
             height: 400,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff'
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
           }}
         >
           <Typography variant="subtitle1" sx={{ 
-            color: '#1a237e',
+            color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
             fontWeight: 500,
             mb: 0.5
           }}>
             API Response Time Distribution
           </Typography>
           <Typography variant="caption" sx={{ 
-            color: '#78909c',
+            color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c',
             display: 'block',
             mb: 3
           }}>
@@ -570,26 +594,31 @@ function Dashboard() {
               <XAxis 
                 type="number" 
                 unit="ms"
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ 
+                  fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161'
+                }}
               />
               <YAxis 
                 dataKey="name" 
                 type="category" 
                 width={100}
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ 
+                  fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161'
+                }}
               />
               <Tooltip 
                 contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px'
+                  backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: '4px',
+                  color: theme.palette.mode === 'dark' ? '#fff' : 'inherit'
                 }}
               />
               <Bar 
                 dataKey="value" 
-                fill="#1a237e"
+                fill={theme.palette.mode === 'dark' ? '#90caf9' : '#1a237e'}
                 radius={[0, 4, 4, 0]}
               />
             </BarChart>
@@ -605,19 +634,19 @@ function Dashboard() {
             p: 3,
             height: 400,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff'
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
           }}
         >
           <Typography variant="subtitle1" sx={{ 
-            color: '#1a237e',
+            color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
             fontWeight: 500,
             mb: 0.5
           }}>
             Server Resource Usage
           </Typography>
           <Typography variant="caption" sx={{ 
-            color: '#78909c',
+            color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c',
             display: 'block',
             mb: 3
           }}>
@@ -625,22 +654,26 @@ function Dashboard() {
           </Typography>
           <ResponsiveContainer width="100%" height="85%">
             <LineChart data={resourceUsageData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke={theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : '#f5f5f5'}
+              />
               <XAxis 
                 dataKey="name"
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161' }}
               />
               <YAxis 
                 unit="%"
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161' }}
               />
               <Tooltip 
                 contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px'
+                  backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: '4px',
+                  color: theme.palette.mode === 'dark' ? '#fff' : 'inherit'
                 }}
               />
               <Legend />
@@ -648,7 +681,7 @@ function Dashboard() {
                 type="monotone"
                 dataKey="cpu"
                 name="CPU"
-                stroke="#1a237e"
+                stroke={theme.palette.mode === 'dark' ? '#90caf9' : '#1a237e'}
                 strokeWidth={2}
                 dot={false}
               />
@@ -656,7 +689,7 @@ function Dashboard() {
                 type="monotone"
                 dataKey="memory"
                 name="Memory"
-                stroke="#0d47a1"
+                stroke={theme.palette.mode === 'dark' ? '#64b5f6' : '#0d47a1'}
                 strokeWidth={2}
                 dot={false}
               />
@@ -664,7 +697,7 @@ function Dashboard() {
                 type="monotone"
                 dataKey="disk"
                 name="Disk"
-                stroke="#1565c0"
+                stroke={theme.palette.mode === 'dark' ? '#42a5f5' : '#1565c0'}
                 strokeWidth={2}
                 dot={false}
               />
@@ -681,19 +714,19 @@ function Dashboard() {
             p: 3,
             height: 400,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff'
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
           }}
         >
           <Typography variant="subtitle1" sx={{ 
-            color: '#1a237e',
+            color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
             fontWeight: 500,
             mb: 0.5
           }}>
             Client Distribution
           </Typography>
           <Typography variant="caption" sx={{ 
-            color: '#78909c',
+            color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c',
             display: 'block',
             mb: 3
           }}>
@@ -714,20 +747,21 @@ function Dashboard() {
                   <Cell 
                     key={`cell-${index}`} 
                     fill={[
-                      '#1a237e',
-                      '#283593',
-                      '#303f9f',
-                      '#3949ab',
-                      '#3f51b5'
+                      '#90caf9',
+                      '#64b5f6',
+                      '#42a5f5',
+                      '#2196f3',
+                      '#1e88e5'
                     ][index % 5]} 
                   />
                 ))}
               </Pie>
               <Tooltip 
                 contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px'
+                  backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: '4px',
+                  color: theme.palette.mode === 'dark' ? '#fff' : 'inherit'
                 }}
               />
               <Legend />
@@ -744,19 +778,19 @@ function Dashboard() {
             p: 3,
             height: 400,
             borderRadius: 1,
-            border: '1px solid #e0e0e0',
-            bgcolor: '#fff'
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
           }}
         >
           <Typography variant="subtitle1" sx={{ 
-            color: '#1a237e',
+            color: (theme) => theme.palette.mode === 'dark' ? 'primary.light' : '#1a237e',
             fontWeight: 500,
             mb: 0.5
           }}>
             System Error Distribution
           </Typography>
           <Typography variant="caption" sx={{ 
-            color: '#78909c',
+            color: (theme) => theme.palette.mode === 'dark' ? 'text.secondary' : '#78909c',
             display: 'block',
             mb: 3
           }}>
@@ -764,34 +798,38 @@ function Dashboard() {
           </Typography>
           <ResponsiveContainer width="100%" height="85%">
             <BarChart data={errorRateData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke={theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : '#f5f5f5'}
+              />
               <XAxis 
                 dataKey="name"
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161' }}
               />
               <YAxis 
-                stroke="#9e9e9e"
-                tick={{ fill: '#616161' }}
+                stroke={theme.palette.mode === 'dark' ? '#aaa' : '#9e9e9e'}
+                tick={{ fill: theme.palette.mode === 'dark' ? '#aaa' : '#616161' }}
               />
               <Tooltip 
                 contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px'
+                  backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: '4px',
+                  color: theme.palette.mode === 'dark' ? '#fff' : 'inherit'
                 }}
               />
               <Legend />
               <Bar 
                 dataKey="4xx" 
                 name="Client Errors" 
-                fill="#1a237e" 
+                fill={theme.palette.mode === 'dark' ? '#90caf9' : '#1a237e'}
                 radius={[4, 4, 0, 0]} 
               />
               <Bar 
                 dataKey="5xx" 
                 name="Server Errors" 
-                fill="#d32f2f" 
+                fill={theme.palette.mode === 'dark' ? '#f48fb1' : '#d32f2f'}
                 radius={[4, 4, 0, 0]} 
               />
             </BarChart>
