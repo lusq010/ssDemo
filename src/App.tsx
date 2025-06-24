@@ -16,6 +16,9 @@ import Login from './Login'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logo from './assets/react.svg'
+import UserList from './pages/UserList'
+import UserAdd from './pages/UserAdd'
+import UserEdit from './pages/UserEdit'
 
 function App() {
   const { mode, toggleMode } = useThemeStore()
@@ -140,6 +143,37 @@ function App() {
                 <ListItem disablePadding sx={{ display: 'block' }}>
                   <ListItemButton
                     component={Link}
+                    to="/list"
+                    selected={['/list', '/add', '/edit'].some(path => location.pathname.startsWith(path))}
+                    sx={{
+                      minHeight: 48,
+                      height: 48,
+                      alignItems: 'center',
+                      justifyContent: drawerOpen ? 'initial' : 'center',
+                      px: 2.5,
+                      '&.Mui-selected, &.Mui-selected:hover': {
+                        backgroundColor: '#092e5d',
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        borderRadius: 0,
+                      },
+                      color: ['/list', '/add', '/edit'].some(path => location.pathname.startsWith(path)) ? '#2f749a' : undefined,
+                    }}
+                  >
+                    <PeopleIcon sx={{ 
+                      minWidth: 0, 
+                      mr: drawerOpen ? 3 : 0, 
+                      mx: drawerOpen ? 0 : 'auto', 
+                      transition: 'margin 0.2s', 
+                      fontSize: 24, 
+                      color: ['/list', '/add', '/edit'].some(path => location.pathname.startsWith(path)) ? '#2f749a' : '#fff'
+                    }} />
+                    <ListItemText primary="用户管理" sx={{ opacity: drawerOpen ? 1 : 0, transition: 'opacity 0.2s', whiteSpace: 'nowrap', ml: drawerOpen ? 1 : 0 }} />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding sx={{ display: 'block' }}>
+                  <ListItemButton
+                    component={Link}
                     to="/about"
                     selected={location.pathname === '/about'}
                     sx={{
@@ -176,6 +210,21 @@ function App() {
             <Route path="/about" element={
               <RequireAuth>
                 <div>关于页面</div>
+              </RequireAuth>
+            } />
+            <Route path="/list" element={
+              <RequireAuth>
+                <UserList />
+              </RequireAuth>
+            } />
+            <Route path="/add" element={
+              <RequireAuth>
+                <UserAdd />
+              </RequireAuth>
+            } />
+            <Route path="/edit/:id" element={
+              <RequireAuth>
+                <UserEdit />
               </RequireAuth>
             } />
           </Routes>

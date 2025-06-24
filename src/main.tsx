@@ -6,15 +6,18 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { BrowserRouter } from 'react-router-dom'
 import { lightTheme, darkTheme } from './theme'
 import useThemeStore from './store/themeStore'
+import { QueryProvider } from './providers/QueryProvider'
 
 function Main() {
   const { mode } = useThemeStore()
   return (
     <ThemeProvider theme={mode === 'dark' ? darkTheme : lightTheme}>
       <CssBaseline />
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <QueryProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </QueryProvider>
     </ThemeProvider>
   )
 }
