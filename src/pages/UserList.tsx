@@ -21,11 +21,13 @@ import {
   DialogContentText,
   DialogTitle,
   CircularProgress,
-  Alert
+  Alert,
+  Tooltip
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CodeIcon from '@mui/icons-material/Code';
 import type { User } from '../types/User';
 import { useUsers, useDeleteUser } from '../hooks/useUsers';
 
@@ -35,6 +37,8 @@ const UserList: React.FC = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
+  const [sqlPreviewOpen, setSqlPreviewOpen] = useState(false);
+  const [sqlPreviewContent, setSqlPreviewContent] = useState('');
 
   // 使用React Query获取用户列表
   const { 
@@ -72,7 +76,7 @@ const UserList: React.FC = () => {
           setUserToDelete(null);
         },
         onError: (error) => {
-          console.error('删除用户失败:', error);
+          console.error('删除失败:', error);
         }
       });
     }
@@ -83,39 +87,42 @@ const UserList: React.FC = () => {
     setUserToDelete(null);
   };
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return '-';
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
+  const handleSqlPreviewClick = (sql: string) => {
+    setSqlPreviewContent(sql);
+    setSqlPreviewOpen(true);
   };
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'admin':
+  const handleSqlPreviewClose = () => {
+    setSqlPreviewOpen(false);
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '-';
+    return dateString;
+  };
+
+  const getInjestTypeColor = (type: string) => {
+    switch (type) {
+      case 'batch':
         return theme.palette.mode === 'dark' ? '#8250df' : '#6200ea';
-      case 'editor':
+      case 'streaming':
         return theme.palette.mode === 'dark' ? '#3fb950' : '#00c853';
-      case 'viewer':
+      case 'incremental':
         return theme.palette.mode === 'dark' ? '#58a6ff' : '#2196f3';
+      case 'full':
+        return theme.palette.mode === 'dark' ? '#f85149' : '#f44336';
       default:
         return theme.palette.mode === 'dark' ? '#aaa' : '#757575';
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return theme.palette.mode === 'dark' ? '#3fb950' : '#00c853';
-      case 'inactive':
-        return theme.palette.mode === 'dark' ? '#f85149' : '#f44336';
-      default:
-        return theme.palette.mode === 'dark' ? '#aaa' : '#757575';
+  const getInjestTypeLabel = (type: string) => {
+    switch (type) {
+      case 'batch': return '批量处理';
+      case 'streaming': return '流式处理';
+      case 'incremental': return '增量处理';
+      case 'full': return '全量处理';
+      default: return type;
     }
   };
 
@@ -134,7 +141,7 @@ const UserList: React.FC = () => {
             fontWeight: 500
           }}
         >
-          用户管理
+          数据任务管理
         </Typography>
         <Button 
           variant="contained" 
@@ -143,7 +150,7 @@ const UserList: React.FC = () => {
           to="/add" 
           startIcon={<AddIcon />}
         >
-          新增用户
+          新增任务
         </Button>
       </Box>
 
@@ -159,7 +166,7 @@ const UserList: React.FC = () => {
         ) : isError ? (
           <Box sx={{ p: 3 }}>
             <Alert severity="error">
-              加载用户数据失败: {error instanceof Error ? error.message : '未知错误'}
+              加载数据失败: {error instanceof Error ? error.message : '未知错误'}
             </Alert>
           </Box>
         ) : (
@@ -172,12 +179,10 @@ const UserList: React.FC = () => {
                       ? 'rgba(255, 255, 255, 0.05)' 
                       : 'rgba(0, 0, 0, 0.02)'
                   }}>
-                    <TableCell>姓名</TableCell>
-                    <TableCell>邮箱</TableCell>
-                    <TableCell>角色</TableCell>
-                    <TableCell>部门</TableCell>
+                    <TableCell>名称</TableCell>
+                    <TableCell>SQL查询</TableCell>
+                    <TableCell>摄取类型</TableCell>
                     <TableCell>状态</TableCell>
-                    <TableCell>最后登录时间</TableCell>
                     <TableCell>创建时间</TableCell>
                     <TableCell align="right">操作</TableCell>
                   </TableRow>
@@ -188,59 +193,83 @@ const UserList: React.FC = () => {
                     .map((user: User) => (
                       <TableRow key={user.id} hover>
                         <TableCell>{user.name}</TableCell>
-                        <TableCell>{user.email}</TableCell>
+                        <TableCell>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography 
+                              variant="body2" 
+                              sx={{ 
+                                maxWidth: 200, 
+                                overflow: 'hidden', 
+                                textOverflow: 'ellipsis', 
+                                whiteSpace: 'nowrap' 
+                              }}
+                            >
+                              {user.sql_query}
+                            </Typography>
+                            <Tooltip title="查看SQL">
+                              <IconButton 
+                                size="small" 
+                                onClick={() => handleSqlPreviewClick(user.sql_query)}
+                              >
+                                <CodeIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                        </TableCell>
                         <TableCell>
                           <Chip 
-                            label={user.role} 
+                            label={getInjestTypeLabel(user.injest_type)} 
                             size="small"
                             sx={{ 
-                              backgroundColor: getRoleColor(user.role),
+                              backgroundColor: getInjestTypeColor(user.injest_type),
                               color: '#fff',
                               fontWeight: 500,
                               textTransform: 'capitalize'
                             }}
                           />
                         </TableCell>
-                        <TableCell>{user.department}</TableCell>
                         <TableCell>
                           <Chip 
-                            label={user.status === 'active' ? '活跃' : '禁用'} 
+                            label={user.enabled ? '已启用' : '已禁用'} 
                             size="small"
                             sx={{ 
-                              backgroundColor: getStatusColor(user.status),
+                              backgroundColor: user.enabled 
+                                ? (theme.palette.mode === 'dark' ? '#3fb950' : '#00c853')
+                                : (theme.palette.mode === 'dark' ? '#f85149' : '#f44336'),
                               color: '#fff',
                               fontWeight: 500
                             }}
                           />
                         </TableCell>
-                        <TableCell>{user.lastLogin ? formatDate(user.lastLogin) : '-'}</TableCell>
-                        <TableCell>{formatDate(user.createdAt)}</TableCell>
+                        <TableCell>{formatDate(user.created_timestamp)}</TableCell>
                         <TableCell align="right">
-                          <IconButton 
-                            component={Link} 
-                            to={`/edit/${user.id}`} 
-                            size="small"
-                            sx={{ mr: 1 }}
-                            disabled={isDeleting && userToDelete === user.id}
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton 
-                            onClick={() => handleDeleteClick(user.id)} 
-                            size="small"
-                            color="error"
-                            disabled={isDeleting && userToDelete === user.id}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <IconButton 
+                              component={Link} 
+                              to={`/edit/${user.id}`} 
+                              size="small"
+                              sx={{ mr: 1 }}
+                              disabled={isDeleting && userToDelete === user.id}
+                            >
+                              <EditIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton 
+                              onClick={() => handleDeleteClick(user.id)} 
+                              size="small"
+                              color="error"
+                              disabled={isDeleting && userToDelete === user.id}
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </Box>
                         </TableCell>
                       </TableRow>
                     ))}
                   {users.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={8} align="center" sx={{ py: 3 }}>
+                      <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
                         <Typography variant="body1" color="text.secondary">
-                          暂无用户数据
+                          暂无数据
                         </Typography>
                       </TableCell>
                     </TableRow>
@@ -271,7 +300,7 @@ const UserList: React.FC = () => {
         <DialogTitle>确认删除</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            您确定要删除此用户吗？此操作无法撤销。
+            您确定要删除此任务吗？此操作无法撤销。
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -284,6 +313,33 @@ const UserList: React.FC = () => {
           >
             {isDeleting ? '删除中...' : '删除'}
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* SQL预览对话框 */}
+      <Dialog
+        open={sqlPreviewOpen}
+        onClose={handleSqlPreviewClose}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>SQL查询预览</DialogTitle>
+        <DialogContent>
+          <Box 
+            sx={{ 
+              p: 2, 
+              backgroundColor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+              borderRadius: 1,
+              fontFamily: 'monospace',
+              whiteSpace: 'pre-wrap',
+              overflowX: 'auto'
+            }}
+          >
+            {sqlPreviewContent}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSqlPreviewClose}>关闭</Button>
         </DialogActions>
       </Dialog>
     </Box>

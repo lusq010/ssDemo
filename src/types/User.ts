@@ -1,12 +1,10 @@
 export interface User {
   id: string;
   name: string;
-  email: string;
-  role: 'admin' | 'editor' | 'viewer';
-  department: string;
-  status: 'active' | 'inactive';
-  lastLogin?: string;
-  createdAt: string;
+  sql_query: string;
+  injest_type: 'batch' | 'streaming' | 'incremental' | 'full';
+  enabled: boolean;
+  created_timestamp: string;
 }
 
-export type UserFormData = Omit<User, 'id' | 'createdAt' | 'lastLogin'>; 
+export type UserFormData = Omit<User, 'id'>; 

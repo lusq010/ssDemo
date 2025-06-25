@@ -5,53 +5,43 @@ import { v4 as uuidv4 } from 'uuid';
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'John Smith',
-    email: 'john.smith@example.com',
-    role: 'admin',
-    department: 'IT',
-    status: 'active',
-    lastLogin: '2023-06-15T10:30:00Z',
-    createdAt: '2023-01-10T08:00:00Z'
+    name: 'Daily Sales Report',
+    sql_query: 'SELECT * FROM sales WHERE date = CURRENT_DATE',
+    injest_type: 'batch',
+    enabled: true,
+    created_timestamp: '2023-01-10 08:00:00'
   },
   {
     id: '2',
-    name: 'Emily Johnson',
-    email: 'emily.johnson@example.com',
-    role: 'editor',
-    department: 'Marketing',
-    status: 'active',
-    lastLogin: '2023-06-14T14:45:00Z',
-    createdAt: '2023-02-05T09:30:00Z'
+    name: 'Customer Analytics',
+    sql_query: 'SELECT customer_id, SUM(purchase_amount) FROM transactions GROUP BY customer_id',
+    injest_type: 'streaming',
+    enabled: true,
+    created_timestamp: '2023-02-05 09:30:00'
   },
   {
     id: '3',
-    name: 'Michael Brown',
-    email: 'michael.brown@example.com',
-    role: 'viewer',
-    department: 'Finance',
-    status: 'inactive',
-    lastLogin: '2023-05-20T11:15:00Z',
-    createdAt: '2023-03-12T10:45:00Z'
+    name: 'Inventory Status',
+    sql_query: 'SELECT product_id, quantity FROM inventory WHERE quantity < threshold',
+    injest_type: 'incremental',
+    enabled: false,
+    created_timestamp: '2023-03-12 10:45:00'
   },
   {
     id: '4',
-    name: 'Sarah Davis',
-    email: 'sarah.davis@example.com',
-    role: 'editor',
-    department: 'HR',
-    status: 'active',
-    lastLogin: '2023-06-16T09:00:00Z',
-    createdAt: '2023-02-18T11:20:00Z'
+    name: 'User Activity Log',
+    sql_query: 'SELECT user_id, action, timestamp FROM user_logs ORDER BY timestamp DESC',
+    injest_type: 'full',
+    enabled: true,
+    created_timestamp: '2023-02-18 11:20:00'
   },
   {
     id: '5',
-    name: 'James Wilson',
-    email: 'james.wilson@example.com',
-    role: 'viewer',
-    department: 'Operations',
-    status: 'active',
-    lastLogin: '2023-06-12T16:30:00Z',
-    createdAt: '2023-04-05T13:15:00Z'
+    name: 'Performance Metrics',
+    sql_query: 'SELECT metric_name, value FROM metrics WHERE date BETWEEN :start_date AND :end_date',
+    injest_type: 'batch',
+    enabled: true,
+    created_timestamp: '2023-04-05 13:15:00'
   }
 ];
 
@@ -61,19 +51,27 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // 随机延迟时间，模拟网络波动
 const randomDelay = () => delay(Math.floor(Math.random() * 500) + 500); // 500-1000ms
 
-// Initialize localStorage with mock data if empty
-const initializeUsers = (): void => {
-  const storedUsers = localStorage.getItem('users');
-  if (!storedUsers) {
-    localStorage.setItem('users', JSON.stringify(mockUsers));
-  }
+// 强制重新初始化localStorage数据（开发环境使用）
+const resetMockData = () => {
+  localStorage.setItem('users', JSON.stringify(mockUsers));
+  console.log('Mock data has been reset');
 };
+
+// 在开发环境中，每次重新加载应用时重置mock数据
+// 这样可以确保我们总是有最新的mock数据
+if (import.meta.env.DEV) {
+  resetMockData();
+}
 
 // 从localStorage获取用户数据
 const getUsersFromStorage = (): User[] => {
-  initializeUsers();
   const users = localStorage.getItem('users');
-  return users ? JSON.parse(users) : [];
+  if (!users) {
+    // 如果没有数据，初始化
+    resetMockData();
+    return mockUsers;
+  }
+  return JSON.parse(users);
 };
 
 // 将用户数据保存到localStorage
@@ -109,8 +107,6 @@ export const createUserApi = async (userData: UserFormData): Promise<User> => {
   const newUser: User = {
     ...userData,
     id: uuidv4(),
-    createdAt: new Date().toISOString(),
-    lastLogin: undefined
   };
   
   users.push(newUser);

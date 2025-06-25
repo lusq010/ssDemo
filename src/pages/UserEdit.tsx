@@ -59,10 +59,10 @@ const UserEdit: React.FC = () => {
   // 提取表单需要的字段
   const formData: UserFormData | undefined = user ? {
     name: user.name,
-    email: user.email,
-    role: user.role,
-    department: user.department,
-    status: user.status
+    sql_query: user.sql_query,
+    injest_type: user.injest_type,
+    enabled: user.enabled,
+    created_timestamp: user.created_timestamp
   } : undefined;
 
   return (
