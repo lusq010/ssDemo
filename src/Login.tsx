@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {/* 导航栏 */}
       <AppBar position="static" sx={{ boxShadow: 'none', borderBottom: 1, borderColor: 'divider' }}>
-        <Toolbar sx={{ minHeight: 48, height: 48, py: 0 }}>
+        <Toolbar sx={{ minHeight: 50, height: 50, py: 0 }}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
             <img src={logo} alt="logo" style={{ width: 32, height: 32, marginRight: 12 }} />
             <span style={{ display: 'inline-block', height: 24, borderLeft: '2px solid #fff', marginRight: 16 }} />

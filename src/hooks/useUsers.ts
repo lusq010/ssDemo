@@ -4,8 +4,9 @@ import {
   fetchUserById, 
   createUserApi, 
   updateUserApi, 
-  deleteUserApi 
+  deleteUserApi
 } from '../services/userService';
+import type { UserFilters } from '../services/userService';
 import type { UserFormData } from '../types/User';
 
 // 查询键
@@ -18,10 +19,10 @@ export const userKeys = {
 };
 
 // 获取所有用户
-export const useUsers = () => {
+export const useUsers = (filters?: UserFilters) => {
   return useQuery({
-    queryKey: userKeys.lists(),
-    queryFn: fetchUsers,
+    queryKey: userKeys.list(filters as Record<string, unknown> || {}),
+    queryFn: () => fetchUsers(filters),
   });
 };
 

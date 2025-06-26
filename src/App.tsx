@@ -43,7 +43,7 @@ function App() {
     <>
       {!isLoginPage && (
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, ml: drawerOpen ? '200px' : '56px', width: `calc(100% - ${drawerOpen ? 200 : 56}px)`, transition: 'margin-left 0.2s, width 0.2s' }}>
-          <Toolbar sx={{ minHeight: 48, height: 48, py: 0 }}>
+          <Toolbar sx={{ minHeight: 50, height: 50, py: 0 }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -105,7 +105,7 @@ function App() {
               },
             }}
           >
-            <Toolbar sx={{ minHeight: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', background: 'transparent', px: 2 }}>
+            <Toolbar sx={{ minHeight: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', background: 'transparent', px: 2 }}>
               {drawerOpen && (
                 <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold', letterSpacing: 1 }}>
                   系统名称

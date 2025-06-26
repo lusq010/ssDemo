@@ -18,6 +18,17 @@ export const lightTheme = createTheme({
         },
       },
     },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          minHeight: '50px !important',
+          height: '50px',
+          '@media (min-width: 600px)': {
+            minHeight: '50px !important',
+          },
+        },
+      },
+    },
   },
 })
 
@@ -33,6 +44,17 @@ export const darkTheme = createTheme({
       styleOverrides: {
         colorPrimary: {
           backgroundColor: appBarBg,
+        },
+      },
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          minHeight: '50px !important',
+          height: '50px',
+          '@media (min-width: 600px)': {
+            minHeight: '50px !important',
+          },
         },
       },
     },

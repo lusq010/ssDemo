@@ -79,10 +79,60 @@ const saveUsersToStorage = (users: User[]): void => {
   localStorage.setItem('users', JSON.stringify(users));
 };
 
+// 过滤条件类型定义
+export interface UserFilters {
+  name?: string;
+  injest_type?: string;
+  enabled?: boolean;
+  date_from?: string;
+  date_to?: string;
+}
+
 // API模拟函数 - 获取所有用户
-export const fetchUsers = async (): Promise<User[]> => {
+export const fetchUsers = async (filters?: UserFilters): Promise<User[]> => {
   await randomDelay();
-  return getUsersFromStorage();
+  let users = getUsersFromStorage();
+  
+  // 如果有过滤条件，应用过滤
+  if (filters) {
+    users = users.filter(user => {
+      // 按名称过滤（模糊匹配）
+      if (filters.name && !user.name.toLowerCase().includes(filters.name.toLowerCase())) {
+        return false;
+      }
+      
+      // 按摄取类型过滤
+      if (filters.injest_type && user.injest_type !== filters.injest_type) {
+        return false;
+      }
+      
+      // 按启用状态过滤
+      if (filters.enabled !== undefined && user.enabled !== filters.enabled) {
+        return false;
+      }
+      
+      // 按创建时间范围过滤
+      if (filters.date_from || filters.date_to) {
+        const userDate = new Date(user.created_timestamp);
+        
+        if (filters.date_from) {
+          const fromDate = new Date(filters.date_from);
+          if (userDate < fromDate) return false;
+        }
+        
+        if (filters.date_to) {
+          const toDate = new Date(filters.date_to);
+          // 将结束日期设置为当天的23:59:59
+          toDate.setHours(23, 59, 59, 999);
+          if (userDate > toDate) return false;
+        }
+      }
+      
+      return true;
+    });
+  }
+  
+  return users;
 };
 
 // API模拟函数 - 获取单个用户
